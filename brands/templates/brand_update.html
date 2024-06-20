@@ -1,12 +1,6 @@
-{% extends 'base.html' %}
 
-{% block title %}
-  SGE - update {{object.name}}
-{% endblock title %} 
-
-{% block content %}
   <div class="container mt-4">
-    <h3 class="display-6">Editar Marca</h3>
+    {% comment %} <h3 class="display-6">Editar Marca</h3> {% endcomment %}
     <div class="card">
       <div class="card-body">
         <form action="" method="post" class="form">
@@ -16,6 +10,5 @@
         </form>
       </div>
     </div>
-    <a href="{% url 'brand_list' %}" class="btn btn-secondary mt-3">Cancelar e Voltar para a Lista de Marcas</a>
+    {% comment %} <a href="{% url 'brand_list' %}" class="btn btn-secondary mt-3">Cancelar e Voltar para a Lista de Marcas</a> {% endcomment %}
   </div>
-{% endblock content %}

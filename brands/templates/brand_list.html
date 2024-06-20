@@ -5,11 +5,39 @@
 {% endblock title %}
 
 {% block content %}
+<style>
+  .notification {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: all 0.6s ease;
+    z-index: 1000;
+}
+
+.notification.error {
+    background-color: #f44336;
+}
+
+.notification.visible {
+    bottom: 20px;
+    opacity: 1;
+}
+
+</style>
+
+{% include "components/_messages.html" %}
   <div class="row mb-3">
     <div class="col-md-6">
       <form action="{% url 'brand_list' %}" method="get">
         <div class="input-group">
-          <input type="text" class="form-control" name="name" placeholder="Nome" value="{{request.GET.name}}">
+          <input type="text" class="form-control" name="name" placeholder="Nome" value="{{ request.GET.name }}">
           <button type="submit" class="btn btn-primary">
             <i class="bi bi-search"></i>
           </button>
@@ -41,15 +69,17 @@
             <td>{{ brand.name }}</td>
             <td>{{ brand.description }}</td>
             <td>
-              <a href="{% url 'brand_datail' brand.id %}" class="btn btn-info btn-sm">
+              <a href="#" class="btn btn-info btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" data-id="{{ brand.id }}">
                 <i class="bi bi-eye"></i>
               </a>
-              <a href="{% url 'brand_update' brand.id %}" class="btn btn-warning btn-sm">
+              <a href="{% url 'brand_update' brand.id %}" class="btn btn-warning btn-sm edit-brand" data-bs-toggle="offcanvas" data-bs-target="#editBrandOffcanvas" data-id="{{ brand.id }}">
                 <i class="bi bi-pencil"></i>
               </a>
-              <a href="{% url 'brand_delete' brand.id %}" class="btn btn-danger btn-sm">
+              <!-- Botão de exclusão com modal -->
+              <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ brand.id }}">
                 <i class="bi bi-trash"></i>
-              </a>
+              </button>
+              {% include "components/_modal_exclusao.html" %}
             </td>
           </tr>
         {% endfor %}
@@ -57,4 +87,32 @@
     </table>
   </div>
   {% include "components/_pagination.html" %}
+  {% include "components/_canvas_detail.html" %}
+  {% include "components/_canvas_update.html" %}
+
+
+    
+  {% comment %} <script>
+    function showNotification(message, type) {
+      const notification = document.createElement('div');
+      notification.classList.add('notification', type);
+      notification.innerText = message;
+  
+      document.body.appendChild(notification);
+  
+      setTimeout(() => {
+          notification.classList.add('visible');
+      }, 100);
+  
+      setTimeout(() => {
+          notification.classList.remove('visible');
+          setTimeout(() => {
+              notification.remove();
+          }, 600);
+      }, 3000);
+  }
+
+  
+  
+  </script> {% endcomment %}
 {% endblock content %}

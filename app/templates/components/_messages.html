@@ -1,0 +1,17 @@
+{% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+                var backgroundColor = "{{ message.tags }}".includes('success') ? '#4caf50' : '#f44336';
+                Toastify({
+                    text: "{{ message }}",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: backgroundColor,
+                }).showToast();
+            {% endfor %}
+        });
+    </script>
+{% endif %}

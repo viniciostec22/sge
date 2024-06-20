@@ -1,0 +1,21 @@
+<!-- components/_modal_exclusao.html -->
+<div class="modal fade" id="confirmDeleteModal{{ brand.id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel{{ brand.id }}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteModalLabel{{ brand.id }}">Confirmação de Exclusão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Tem certeza que deseja excluir a marca <strong>{{ brand.name }}</strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <form action="{% url 'brand_delete' brand.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Excluir</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

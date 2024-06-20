@@ -1,0 +1,60 @@
+<!-- Estrutura do Offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">{{brands.name}}</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div id="offcanvasContent" class="container mt-4">
+      <!-- Conteúdo dinâmico será carregado aqui -->
+    </div>
+  </div>
+</div>
+
+<!-- Script para carregar dados dinamicamente -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var offcanvasExample = document.getElementById('offcanvasExample');
+
+    offcanvasExample.addEventListener('show.bs.offcanvas', function (event) {
+      var button = event.relatedTarget;
+      var brandId = button.getAttribute('data-id');
+
+      console.log('Offcanvas aberto para a marca ID:', brandId);
+
+      fetch(`/brands/${brandId}/detail/`, {
+        headers: {
+          'x-requested-with': 'XMLHttpRequest'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erro na rede ao carregar dados');
+          }
+          return response.json();
+        })
+        .then(data => {
+          var offcanvasContent = document.getElementById('offcanvasContent');
+          offcanvasContent.innerHTML = `
+            <h3 class="display-6">Detalhes da Marca</h3>
+            <div class="card">
+              <div class="card-body">
+                <h3 class="card-title">${data.name}</h3>
+                <p class="card-text">${data.description}</p>
+              </div>
+            </div>
+            <a href="{% url 'brand_list' %}" class="btn btn-secondary mt-3">Voltar para a Lista de Marcas</a>
+          `;
+        })
+        .catch(error => {
+          console.error('Erro ao carregar os dados:', error);
+          var offcanvasContent = document.getElementById('offcanvasContent');
+          offcanvasContent.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+              Erro ao carregar os dados da marca.
+            </div>
+          `;
+        });
+    });
+  });
+</script>
