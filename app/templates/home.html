@@ -3,12 +3,16 @@
 {% block title %}Home{% endblock title %}
 
 {% block content %}
-
+  {% if perms.products.view_product and perms.inflows.view_inflow %}
     {% include "components/_product_metrics.html" %}
+  {% endif %}
+
+  {% if perms.autflows.view_outflow %}
     {% include "components/_sales_metrics.html" %}
+  {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  {% if perms.autflows.view_outflow %}
     <div class="row mt-4 justify-content-center">
         <div class="col-md-6 text-center">
             <h5 class="text-center mb-3">Valor de vendas (ultimos 7 dias)</h5>
@@ -72,7 +76,8 @@
           });
         </script>
     </div>
-
+  {% endif %}
+  {% if perms.products.view_product %}
     <div class="row mt-4 justify-content-center">
         <div class="col-md-6 text-center">
             <h5 class="text-center mb-3">Produtos por Categoria</h5>
@@ -137,6 +142,7 @@
           });
         </script>
     </div>
+  {% endif %}
 
 
 {% endblock content %}
