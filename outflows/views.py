@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView
+from app.metrics import get_sales_metrics
 from . import models, forms
-
 
 class OutflowListView(ListView):
     model = models.Outflow
@@ -18,6 +18,10 @@ class OutflowListView(ListView):
 
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sales_metrics'] = get_sales_metrics()
+        return context
 
 class OutflowCreateView(CreateView):
     model = models.Outflow
