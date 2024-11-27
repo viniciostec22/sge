@@ -1,4 +1,5 @@
 from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from . import models, forms
@@ -7,7 +8,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.template.loader import render_to_string
 
-class BrandListView(ListView):
+class BrandListView(LoginRequiredMixin, ListView):
     model = models.Brand
     template_name = 'brand_list.html'
     context_object_name = 'brands'
@@ -22,13 +23,13 @@ class BrandListView(ListView):
             
         return queryset
     
-class BrandCreateView( CreateView):
+class BrandCreateView(LoginRequiredMixin, CreateView):
     model = models.Brand
     template_name = 'brand_create.html'
     form_class = forms.BrandForm
     success_url = reverse_lazy('brand_list')
     
-class BrandDetailView(DetailView):
+class BrandDetailView(LoginRequiredMixin, DetailView):
     model = models.Brand
     template_name = 'brand_detail.html'
     
@@ -44,7 +45,7 @@ class BrandDetailView(DetailView):
         else:
             return super().render_to_response(context, **response_kwargs)
     
-class BrandUpdateView(UpdateView):
+class BrandUpdateView(LoginRequiredMixin, UpdateView):
     model = models.Brand
     template_name = 'brand_update.html'
     form_class = forms.BrandForm
@@ -65,7 +66,7 @@ class BrandUpdateView(UpdateView):
         else:
             return self.render_to_response(self.get_context_data(form=form))
     
-class BrandDeleteView(SuccessMessageMixin,DeleteView):
+class BrandDeleteView(LoginRequiredMixin, SuccessMessageMixin,DeleteView):
     model = models.Brand
     template_name = 'brand_delete.html'
     success_url = reverse_lazy('brand_list')
