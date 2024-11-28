@@ -1,8 +1,9 @@
+from rest_framework import generics
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView, CreateView, DetailView
 from app.metrics import get_sales_metrics
-from . import models, forms
+from . import models, forms, serializers
 
 class OutflowListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = models.Outflow
@@ -41,3 +42,11 @@ class OutflowDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView)
     permission_required = 'autflows.view_outflow'
 
 
+class OutflowCreateListAPIView(generics.ListCreateAPIView):
+    queryset = models.Outflow.objects.all()
+    serializer_class = serializers.OutflowSerializer
+
+
+class OutflowRetrieveAPIView(generics.RetrieveAPIView):
+    queryset = models.Outflow.objects.all()
+    serializer_class = serializers.OutflowSerializer

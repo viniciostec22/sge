@@ -1,8 +1,9 @@
+from rest_framework import generics
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
-from . import models, forms
+from . import models, forms, serializers
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
@@ -85,5 +86,13 @@ class BrandDeleteView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessag
         except Exception as e:
             messages.error(self.request, "Erro ao deletar a marca: {}".format(str(e)))
             return self.render_to_response(self.get_context_data())
-    
-    
+
+
+class BrandCreateListAPIView(generics.ListCreateAPIView):
+    queryset = models.Brand.objects.all()
+    serializer_class = serializers.BrandSerializer
+
+
+class BrandRetriveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Brand.objects.all()
+    serializer_class = serializers.BrandSerializer
