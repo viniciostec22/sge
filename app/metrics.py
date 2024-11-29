@@ -13,7 +13,7 @@ def get_product_metrics():
     total_selling_price = sum(product.selling_price * product.quantity for product in products)
     total_quantity = sum(product.quantity for product in products)
     total_profit = total_selling_price - total_cost_price
-    
+
     return dict(
         total_cost_price=number_format(total_cost_price, decimal_pos=2, force_grouping=True),
         total_selling_price=number_format(total_selling_price, decimal_pos=2, force_grouping=True),
@@ -72,10 +72,12 @@ def get_daily_sales_quantity_data():
         values=quantities,
     )
 
+
 def get_granphic_product_category_metric():
     categories = Category.objects.all()
     return {category.name: Product.objects.filter(category=category).count() for category in categories}
 
-def get_granphic_product_brand_metric(): 
+
+def get_granphic_product_brand_metric():
     brands = Brand.objects.all()
     return {brand.name: Product.objects.filter(brand=brand).count() for brand in brands}

@@ -4,10 +4,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from . import models, forms, serializers
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.template.loader import render_to_string
+
 
 class BrandListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = models.Brand
@@ -15,28 +16,30 @@ class BrandListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = 'brands'
     paginate_by = 10
     permission_required = 'brands.view_brand'
-    
+
     def get_queryset(self):
         queryset = super().get_queryset()
         name = self.request.GET.get('name')
-        
+
         if name:
             queryset = queryset.filter(name__icontains=name)
-            
+
         return queryset
-    
+
+
 class BrandCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = models.Brand
     template_name = 'brand_create.html'
     form_class = forms.BrandForm
     success_url = reverse_lazy('brand_list')
     permission_required = 'brands.add_brand'
-    
+
+
 class BrandDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = models.Brand
     template_name = 'brand_detail.html'
     permission_required = 'brands.view_brand'
-    
+
     def render_to_response(self, context, **response_kwargs):
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             brand = self.get_object()
@@ -48,14 +51,15 @@ class BrandDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
             return JsonResponse(data)
         else:
             return super().render_to_response(context, **response_kwargs)
-    
+
+
 class BrandUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = models.Brand
     template_name = 'brand_update.html'
     form_class = forms.BrandForm
     success_url = reverse_lazy('brand_list')
     permission_required = 'brands.change_brand'
-    
+
     def form_valid(self, form):
         form.save()
         messages.success(self.request, 'Marca atualizada com sucesso!')
@@ -70,14 +74,15 @@ class BrandUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
             return JsonResponse({'success': False, 'form_html': form_html})
         else:
             return self.render_to_response(self.get_context_data(form=form))
-    
-class BrandDeleteView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin,DeleteView):
+
+
+class BrandDeleteView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
     model = models.Brand
     template_name = 'brand_delete.html'
     success_url = reverse_lazy('brand_list')
     success_message = "Marca deletada com sucesso."
     permission_required = 'brands.delete_brand'
-    
+
     def delete(self, request, *args, **kwargs):
         try:
             response = super().delete(request, *args, **kwargs)

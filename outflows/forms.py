@@ -17,11 +17,11 @@ class OutflowForm(forms.ModelForm):
             'quantity': 'Quantidade',
             'description': 'Descrição',
         }
-        
+
     def clean_quantity(self):
         quantity = self.cleaned_data.get('quantity')
         product = self.cleaned_data.get('product')
-        
+
         if quantity > product.quantity:
             raise ValidationError(
                 f'A quantidade disponivel em estoque para o produto {product.title} é de {product.quantity} unidades.'

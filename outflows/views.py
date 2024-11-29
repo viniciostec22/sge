@@ -5,6 +5,7 @@ from django.views.generic import ListView, CreateView, DetailView
 from app.metrics import get_sales_metrics
 from . import models, forms, serializers
 
+
 class OutflowListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = models.Outflow
     template_name = 'outflow_list.html'
@@ -25,6 +26,7 @@ class OutflowListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['sales_metrics'] = get_sales_metrics()
         return context
+
 
 class OutflowCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = models.Outflow

@@ -13,8 +13,6 @@ def home(request):
     granphic_product_category_metric = metrics.get_granphic_product_category_metric()
     granphic_product_brand_metric = metrics.get_granphic_product_brand_metric()
 
-
-
     context = {
         'product_metrics': product_metrics,
         'sales_metrics': sales_metrics,
